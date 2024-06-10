@@ -318,21 +318,21 @@ df3 = data_preparation( df2 )
 # prediction
 df_response = get_prediction( model, df_test, df3 )
 
-df_sales_raw = pd.read_csv("dataset/train.csv", low_memory=False)
-df_store_raw = pd.read_csv("dataset/store.csv", low_memory=False)
-df_train_raw = pd.merge(df_sales_raw, df_store_raw, on='Store', how='left')
-df_train_raw = df_train_raw[~df_train_raw['Open'].isnull()]
-df_train_raw = df_train_raw[df_train_raw['Open'] != 0]
+#df_sales_raw = pd.read_csv("dataset/train.csv", low_memory=False)
+#df_store_raw = pd.read_csv("dataset/store.csv", low_memory=False)
+#df_train_raw = pd.merge(df_sales_raw, df_store_raw, on='Store', how='left')
+#df_train_raw = df_train_raw[~df_train_raw['Open'].isnull()]
+#df_train_raw = df_train_raw[df_train_raw['Open'] != 0]
 
 
-df4 = data_cleaning_train( df_train_raw )
+#df4 = data_cleaning_train( df_train_raw )
 # feature engineering
-df5 = feature_engineering_train( df4 )
+#df5 = feature_engineering_train( df4 )
 # data preparation
-df_train = data_preparation_train( df5 )
+#df_train = data_preparation_train( df5 )
 
 df_predictions_csv = convert_df(df_response)
-df_train_csv = convert_df(df_train)
+#df_train_csv = convert_df(df_train)
 #---------------------------------------------------------------------------------------------------------                             
 # 1.1 VISÃO GERENCIAL//MAIN PAGE
 #---------------------------------------------------------------------------------------------------------
@@ -353,10 +353,10 @@ st.sidebar.download_button(label = 'Download Predictions.csv',
                            file_name = 'df_predictions.csv',
                            mime = 'text/csv')
 
-st.sidebar.download_button(label = 'Download Train.csv',
-                           data = df_train_csv,
-                           file_name = 'df_train.csv',
-                           mime = 'text/csv')
+#st.sidebar.download_button(label = 'Download Train.csv',
+                           #data = df_train_csv,
+                           #file_name = 'df_train.csv',
+                           #mime = 'text/csv')
 
 st.sidebar.markdown("""____""")
 st.sidebar.markdown('#### desenvolvido por @tfmeneghello')
@@ -382,60 +382,60 @@ with st.container():
 
     
 with st.container():
-    col1, col2= st.columns(2, gap='large')
-    with col1:
-        st.markdown('##### Procure a previsão de vendas de uma loja para as próximas 6 semanas.')
-        store_id_input = st.number_input('Store Id', step=1, placeholder="caso a previsão seja 0, o Id não é válido")
-        df_previsao = df_response.loc[df_response['store'] == store_id_input, ['store','predictions']].groupby('store').sum().reset_index()
-        if not df_previsao.empty:
-            prev =  int(df_previsao['predictions'])
-            prev =  f"R$ {prev:,.2f}"
+    #col1, col2= st.columns(2, gap='large')
+    #with col1:
+    st.markdown('##### Procure a previsão de vendas de uma loja para as próximas 6 semanas.')
+    store_id_input = st.number_input('Store Id', step=1, placeholder="caso a previsão seja 0, o Id não é válido")
+    df_previsao = df_response.loc[df_response['store'] == store_id_input, ['store','predictions']].groupby('store').sum().reset_index()
+    if not df_previsao.empty:
+        prev =  int(df_previsao['predictions'])
+        prev =  f"R$ {prev:,.2f}"
 
-        else:
-            prev = 0
-        st.write("A receita prevista é: ",  prev)
+    else:
+        prev = 0
+    st.write("A receita prevista é: ",  prev)
     
-    with col2:
-        st.markdown('##### Tabela com todas as lojas')
-        df_pred_store = df_response.loc[:, ['predictions', 'store']].groupby('store').sum().reset_index()
+    #with col2:
+        #st.markdown('##### Tabela com todas as lojas')
+        #df_pred_store = df_response.loc[:, ['predictions', 'store']].groupby('store').sum().reset_index()
         #df_assort_store = df_response.loc[:, ['assortment', 'store']].groupby('store').apply(lambda x: x['assortment']).reset_index()
         #df_assort_store = df_assort_store.drop(columns='level_1')
         #df_assort_store = df_assort_store.drop_duplicates()
         #df_pred_tabule = pd.merge(df_pred_store, df_assort_store, how='left', on='store')
-        df_pred_store = df_pred_store.rename(columns={'predictions': 'previsão_vendas'})
-        df_pred_store['previsão_vendas'] = df_pred_store['previsão_vendas'].map('R$ {:,.2f}'.format)
-        df_pred_store = df_pred_store.set_index('store')
-        st.dataframe(df_pred_store, use_container_width=True)
+        #df_pred_store = df_pred_store.rename(columns={'predictions': 'previsão_vendas'})
+        #df_pred_store['previsão_vendas'] = df_pred_store['previsão_vendas'].map('R$ {:,.2f}'.format)
+        #df_pred_store = df_pred_store.set_index('store')
+        #st.dataframe(df_pred_store, use_container_width=True)
         
 
 
-with st.container():
-    st.write("""##### Gráfico evolução das vendas""")
+#with st.container():
+    #st.write("""##### Gráfico evolução das vendas""")
    
     ## 1.3 Data types
-    df_response_graph = df_response.loc[:, ['store','date','predictions']]
-    df5_graph = df5.loc[:, ['store', 'date', 'sales']]
-    result = pd.concat([df_response_graph, df5_graph], ignore_index=True)
-    result['sales_forecast'] = result['predictions'].fillna(result['sales'])
-    resultgraph = result.loc[result['date']>'2014-07-31', ['sales_forecast','date']].groupby('date').sum().reset_index()
-    fig = px.line(resultgraph, x='date', y=['sales_forecast'], template='plotly', title= 'Evolução das vendas nos últimos 12 meses', markers=True)
+    #df_response_graph = df_response.loc[:, ['store','date','predictions']]
+    #df5_graph = df5.loc[:, ['store', 'date', 'sales']]
+    #result = pd.concat([df_response_graph, df5_graph], ignore_index=True)
+    #result['sales_forecast'] = result['predictions'].fillna(result['sales'])
+    #resultgraph = result.loc[result['date']>'2014-07-31', ['sales_forecast','date']].groupby('date').sum().reset_index()
+    #fig = px.line(resultgraph, x='date', y=['sales_forecast'], template='plotly', title= 'Evolução das vendas nos últimos 12 meses', markers=True)
 
-    x_split = '2015-08-01'
+    #x_split = '2015-08-01'
 
     # Criando listas para os dados antes e depois do ponto de divisão
-    df_before = resultgraph[resultgraph['date'] < x_split]
-    df_after = resultgraph[resultgraph['date'] >= x_split]
+    #df_before = resultgraph[resultgraph['date'] < x_split]
+    #df_after = resultgraph[resultgraph['date'] >= x_split]
 
     # Adicionando a linha antes do ponto de divisão
-    fig.add_trace(go.Scatter(x=df_before['date'], y=df_before['sales_forecast'], mode='lines', line=dict(color='blue'), name='Vendas'))
+    #fig.add_trace(go.Scatter(x=df_before['date'], y=df_before['sales_forecast'], mode='lines', line=dict(color='blue'), name='Vendas'))
 
     # Adicionando a linha depois do ponto de divisão
-    fig.add_trace(go.Scatter(x=df_after['date'], y=df_after['sales_forecast'], mode='lines', line=dict(color='red'), name='Previsão'))
+    #fig.add_trace(go.Scatter(x=df_after['date'], y=df_after['sales_forecast'], mode='lines', line=dict(color='red'), name='Previsão'))
 
     # Atualizando o layout para remover a linha original do plotly.express
-    fig.update_traces(visible=False, selector=dict(name='sales_forecast'))
+    #fig.update_traces(visible=False, selector=dict(name='sales_forecast'))
 
     # Exibindo o gráfico
-    st.plotly_chart(fig, use_container_width=True)
+    #st.plotly_chart(fig, use_container_width=True)
 
 print("estou aqui")
