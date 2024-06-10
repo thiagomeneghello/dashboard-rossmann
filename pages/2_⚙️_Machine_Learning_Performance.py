@@ -241,7 +241,7 @@ def ml_error(model_name, testy, haty):
                          'MAPE': mape,
                          'RMSE': rmse}, index=[0])
 
-@st.cache_data
+#@st.cache_data
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 #---------------------------------------------------------------------------------------------------------
@@ -249,8 +249,8 @@ def convert_df(df):
 # IMPORTANDO DATASET
 # LIMPEZA DATASET
 #---------------------------------------------------------------------------------------------------------
-df_sales_raw = pd.read_csv("dataset/train.csv", low_memory=False)
-df_store_raw = pd.read_csv("dataset/store.csv", low_memory=False)
+df_sales_raw = pd.read_csv("dataset/train.csv") #, low_memory=False)
+df_store_raw = pd.read_csv("dataset/store.csv") #, low_memory=False)
 df_train_raw = pd.merge(df_sales_raw, df_store_raw, on='Store', how='left')
 df_train_raw = df_train_raw[~df_train_raw['Open'].isnull()]
 df_train_raw = df_train_raw[df_train_raw['Open'] != 0]
