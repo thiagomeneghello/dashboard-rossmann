@@ -241,7 +241,7 @@ def ml_error(model_name, testy, haty):
                          'MAPE': mape,
                          'RMSE': rmse}, index=[0])
 
-#@st.cache_data
+@st.cache_data
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 #---------------------------------------------------------------------------------------------------------
@@ -255,11 +255,11 @@ df_train_raw = pd.merge(df_sales_raw, df_store_raw, on='Store', how='left')
 df_train_raw = df_train_raw[~df_train_raw['Open'].isnull()]
 df_train_raw = df_train_raw[df_train_raw['Open'] != 0]
 
-df4 = data_cleaning_train( df_train_raw )
+df_train_raw = data_cleaning_train( df_train_raw )
 # feature engineering
-df5 = feature_engineering_train( df4 )
+df_train_raw = feature_engineering_train( df_train_raw )
 # data preparation
-df_train = data_preparation_train( df5 )
+df_train = data_preparation_train( df_train_raw )
 
 x_train_ml, x_test_ml, y_train_ml, y_test_ml= train_test(df_train)
 
