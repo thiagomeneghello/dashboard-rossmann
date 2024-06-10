@@ -9,9 +9,8 @@ import streamlit            as st
 import xgboost              as xgb
 import pandas               as pd
 import numpy                as np
-import matplotlib.pyplot    as plt
 from sklearn import preprocessing as pp
-from sklearn import metrcis       as mt
+from sklearn import metrics       as mt
 from PIL     import Image
 
 
@@ -20,12 +19,12 @@ st.set_page_config(page_title='Home', page_icon='💊', layout='wide')
 #---------------------------------------------------------------------------------------------------------
 # DEF FUNÇÕES
 #---------------------------------------------------------------------------------------------------------
-model = pickle.load(open('pickle/model_rossmann.pkl', 'rb'))
-comp_distance_scaler = pickle.load(open('pickle/comp_distance_scaler.pkl', 'rb'))
-comp_timemonth_scaler = pickle.load(open('pickle/comp_timemonth_scaler.pkl', 'rb'))
-promo_timeweek_scaler = pickle.load(open('pickle/promo_timeweek_scaler.pkl', 'rb'))
-year_scaler = pickle.load(open('pickle/year_scaler.pkl', 'rb'))
-store_type_scaler = pickle.load(open('pickle/store_type_scaler.pkl', 'rb'))
+model = pickle.load(open('params/model_rossmann.pkl', 'rb'))
+comp_distance_scaler = pickle.load(open('params/competition_distance_scaler.pkl', 'rb'))
+comp_timemonth_scaler = pickle.load(open('params/competition_time_month_scaler.pkl', 'rb'))
+promo_timeweek_scaler = pickle.load(open('params/promo_time_week_scaler.pkl', 'rb'))
+year_scaler = pickle.load(open('params/year_scaler.pkl', 'rb'))
+store_type_scaler = pickle.load(open('params/store_type_scaler.pkl', 'rb'))
 
 def data_cleaning(df1):
     cols_old = ['Store', 'DayOfWeek', 'Date', 'Open', 'Promo',
@@ -304,8 +303,8 @@ def convert_df(df):
 # IMPORTANDO DATASET
 # LIMPEZA DATASET
 #---------------------------------------------------------------------------------------------------------
-df10 = pd.read_csv('./dataset/test.csv', low_memory=False)
-df_store_raw = pd.read_csv('./dataset/store.csv', low_memory=False)
+df10 = pd.read_csv('dataset/test.csv', low_memory=False)
+df_store_raw = pd.read_csv('dataset/store.csv', low_memory=False)
 df_test = pd.merge(df10, df_store_raw, how='left', on='Store')
 df_test = df_test[~df_test['Open'].isnull()]
 df_test = df_test[df_test['Open'] != 0]
@@ -319,8 +318,8 @@ df3 = data_preparation( df2 )
 # prediction
 df_response = get_prediction( model, df_test, df3 )
 
-df_sales_raw = pd.read_csv("./dataset/train.csv", low_memory=False)
-df_store_raw = pd.read_csv("./dataset/store.csv", low_memory=False)
+df_sales_raw = pd.read_csv("dataset/train.csv", low_memory=False)
+df_store_raw = pd.read_csv("dataset/store.csv", low_memory=False)
 df_train_raw = pd.merge(df_sales_raw, df_store_raw, on='Store', how='left')
 df_train_raw = df_train_raw[~df_train_raw['Open'].isnull()]
 df_train_raw = df_train_raw[df_train_raw['Open'] != 0]
@@ -399,14 +398,14 @@ with st.container():
     with col2:
         st.markdown('##### Tabela com todas as lojas')
         df_pred_store = df_response.loc[:, ['predictions', 'store']].groupby('store').sum().reset_index()
-        df_assort_store = df_response.loc[:, ['assortment', 'store']].groupby('store').apply(lambda x: x['assortment']).reset_index()
-        df_assort_store = df_assort_store.drop(columns='level_1')
-        df_assort_store = df_assort_store.drop_duplicates()
-        df_pred_tabule = pd.merge(df_pred_store, df_assort_store, how='left', on='store')
-        df_pred_tabule = df_pred_tabule.rename(columns={'predictions': 'previsão_vendas'})
-        df_pred_tabule['previsão_vendas'] = df_pred_tabule['previsão_vendas'].map('R$ {:,.2f}'.format)
-        df_pred_tabule = df_pred_tabule.set_index('store')
-        st.dataframe(df_pred_tabule, use_container_width=True)
+        #df_assort_store = df_response.loc[:, ['assortment', 'store']].groupby('store').apply(lambda x: x['assortment']).reset_index()
+        #df_assort_store = df_assort_store.drop(columns='level_1')
+        #df_assort_store = df_assort_store.drop_duplicates()
+        #df_pred_tabule = pd.merge(df_pred_store, df_assort_store, how='left', on='store')
+        df_pred_store = df_pred_store.rename(columns={'predictions': 'previsão_vendas'})
+        df_pred_store['previsão_vendas'] = df_pred_store['previsão_vendas'].map('R$ {:,.2f}'.format)
+        df_pred_store = df_pred_store.set_index('store')
+        st.dataframe(df_pred_store, use_container_width=True)
         
 
 
