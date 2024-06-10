@@ -293,7 +293,7 @@ def get_prediction(model, original_data, test_data):
 
     return original_data
 
-#@st.cache_data
+@st.cache_data
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
@@ -363,8 +363,8 @@ st.sidebar.markdown('#### desenvolvido por @tfmeneghello')
 
 
 #LAYOUT--------------------------------------------------------------------------------------------------
-st.write("# Rossmann")
-st.header("Projeto de previsão de vendas para as próximas 6 semanas.")
+st.write("# Rossmann Sales Forecast")
+st.header("Projeto de previsão de vendas rede de farmácia.")
 
 with st.container():
     st.write("""#### Principais indicadores cadastrados:""")
@@ -393,6 +393,7 @@ with st.container():
 
     else:
         prev = 0
+        prev = f"{prev} - Loja sem previsão"
     st.write("A receita prevista é: ",  prev)
     
     #with col2:

@@ -241,6 +241,9 @@ def ml_error(model_name, testy, haty):
                          'MAPE': mape,
                          'RMSE': rmse}, index=[0])
 
+@st.cache_data
+def convert_df(df):
+    return df.to_csv().encode('utf-8')
 #---------------------------------------------------------------------------------------------------------
 #                                     INÍCIO ESTRUTURA LÓGICA
 # IMPORTANDO DATASET
@@ -266,7 +269,7 @@ df_p = performance(df_train, pred)
 
 df_gp = graph_performance(df_train, pred)
 
-
+df_train_csv = convert_df(df_train)
 #---------------------------------------------------------------------------------------------------------                             
 # 1.2 Machine Learning Performance//
 #---------------------------------------------------------------------------------------------------------
@@ -277,6 +280,13 @@ st.sidebar.image(image, width=100)
 
 st.sidebar.markdown('# Rossmann')
 st.sidebar.markdown('## Machine Learning Performance')
+
+st.sidebar.markdown("""____""")
+st.sidebar.markdown('### Dados tratados')
+st.sidebar.download_button(label = 'Download Train.csv',
+                           data = df_predictions_csv,
+                           file_name = 'df_predictions.csv',
+                           mime = 'text/csv')
 
 st.sidebar.markdown("""____""")
 
