@@ -293,7 +293,7 @@ def get_prediction(model, original_data, test_data):
 
     return original_data
 
-@st.cache_data
+#@st.cache_data
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 

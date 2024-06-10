@@ -293,7 +293,7 @@ def get_prediction(model, original_data, test_data):
 
     return original_data
 
-@st.cache_data
+#@st.cache_data
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
@@ -303,8 +303,8 @@ def convert_df(df):
 # IMPORTANDO DATASET
 # LIMPEZA DATASET
 #---------------------------------------------------------------------------------------------------------
-df10 = pd.read_csv('./dataset/test.csv', low_memory=False)
-df_store_raw = pd.read_csv('./dataset/store.csv', low_memory=False)
+df10 = pd.read_csv('dataset/test.csv', low_memory=False)
+df_store_raw = pd.read_csv('dataset/store.csv', low_memory=False)
 df_test = pd.merge(df10, df_store_raw, how='left', on='Store')
 df_test = df_test[~df_test['Open'].isnull()]
 df_test = df_test[df_test['Open'] != 0]
@@ -318,8 +318,8 @@ df3 = data_preparation( df2 )
 # prediction
 df_response = get_prediction( model, df_test, df3 )
 
-df_sales_raw = pd.read_csv("./dataset/train.csv", low_memory=False)
-df_store_raw = pd.read_csv("./dataset/store.csv", low_memory=False)
+df_sales_raw = pd.read_csv("dataset/train.csv", low_memory=False)
+df_store_raw = pd.read_csv("dataset/store.csv", low_memory=False)
 df_train_raw = pd.merge(df_sales_raw, df_store_raw, on='Store', how='left')
 df_train_raw = df_train_raw[~df_train_raw['Open'].isnull()]
 df_train_raw = df_train_raw[df_train_raw['Open'] != 0]
