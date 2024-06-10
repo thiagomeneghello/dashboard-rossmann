@@ -284,7 +284,7 @@ st.sidebar.markdown('## Machine Learning Performance')
 st.sidebar.markdown("""____""")
 st.sidebar.markdown('### Dados tratados')
 st.sidebar.download_button(label = 'Download Train.csv',
-                           data = df_predictions_csv,
+                           data = df_train_csv,
                            file_name = 'df_predictions.csv',
                            mime = 'text/csv')
 
